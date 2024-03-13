@@ -20,13 +20,24 @@ spec:
     - secretName: staging-tls
       hosts:
         - staging-poc-api.antrein.com
+        - staging-poc.antrein.com
   rules:
   - host: staging-poc-api.antrein.com
     http:
       paths:
       - backend:
           service:
-            name: proof-of-concept
+            name: poc-be
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  - host: staging-poc.antrein.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: poc-fe
             port:
               number: 80
         path: /
