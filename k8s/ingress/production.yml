@@ -2,12 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: antrein
-  namespace: staging
+  namespace: production
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "3M"
     kubernetes.io/ingress.allow-http: "true"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "Access-Control-Allow-Origin: $http_origin";
       # add_header Access-Control-Allow-Origin $http_origin;
@@ -18,28 +18,17 @@ metadata:
 spec:
   ingressClassName: nginx
   tls:
-    - secretName: staging-tls
+    - secretName: production-tls
       hosts:
-        - staging-poc-api.antrein.com
-        - staging-poc.antrein.com
+        - infra-manager.antrein.com
         
   rules:
-  - host: staging-poc-api.antrein.com
+  - host: infra-manager.antrein.com
     http:
       paths:
       - backend:
           service:
-            name: poc-be
-            port:
-              number: 80
-        path: /
-        pathType: ImplementationSpecific
-  - host: staging-poc.antrein.com
-    http:
-      paths:
-      - backend:
-          service:
-            name: poc-fe
+            name: infra-manager
             port:
               number: 80
         path: /
